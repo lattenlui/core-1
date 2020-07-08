@@ -159,7 +159,7 @@ Feature: dav-versions
     Then the version folder of fileId "<<FILEID>>" for user "Brian" should contain "1" element
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharer of a file can see the old version information when the sharee changes the content of the file
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "First content" to "sharefile.txt"
@@ -169,7 +169,19 @@ Feature: dav-versions
     And the version folder of file "/sharefile.txt" for user "Alice" should contain "1" element
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcV10 @issue-ocis-reva-243
+  #after fixing all issues delete this Scenario and use the one above
+  Scenario: sharer of a file can see the old version information when the sharee changes the content of the file
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file with content "First content" to "sharefile.txt"
+    And user "Alice" has shared file "sharefile.txt" with user "Brian"
+    When user "Brian" has uploaded file with content "Second content" to "/sharefile.txt"
+    Then the HTTP status code should be "201"
+    And the version folder of file "/sharefile.txt" for user "Alice" should contain "0" element
+#    And the version folder of file "/sharefile.txt" for user "Alice" should contain "1" element
+
+  @files_sharing-app-required
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharer of a file can restore the original content of a shared file after the file has been modified by the sharee
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "First content" to "sharefile.txt"
@@ -181,7 +193,22 @@ Feature: dav-versions
     And the content of file "/sharefile.txt" for user "Brian" should be "First content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcV10 @issue-ocis-reva-243
+   #after fixing all issues delete this Scenario and use the one above
+  Scenario: sharer of a file can restore the original content of a shared file after the file has been modified by the sharee
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file with content "First content" to "sharefile.txt"
+    And user "Alice" has shared file "sharefile.txt" with user "Brian"
+    And user "Brian" has uploaded file with content "Second content" to "/sharefile.txt"
+    When user "Alice" restores version index "0" of file "/sharefile.txt" using the WebDAV API
+#    When user "Alice" restores version index "1" of file "/sharefile.txt" using the WebDAV API
+    Then the HTTP status code should be "201"
+    And the content of file "/sharefile.txt" for user "Alice" should be "First content"
+    And the content of file "/sharefile.txt" for user "Brian" should be "Second content"
+#    And the content of file "/sharefile.txt" for user "Brian" should be "First content"
+
+  @files_sharing-app-required
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharer can restore a file inside a shared folder modified by sharee
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/sharingfolder"
@@ -194,7 +221,7 @@ Feature: dav-versions
     And the content of file "/sharingfolder/sharefile.txt" for user "Brian" should be "First content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharee can restore a file inside a shared folder modified by sharee
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/sharingfolder"
@@ -207,7 +234,7 @@ Feature: dav-versions
     And the content of file "/sharingfolder/sharefile.txt" for user "Brian" should be "First content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharer can restore a file inside a shared folder created by sharee and modified by sharer
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/sharingfolder"
@@ -220,7 +247,7 @@ Feature: dav-versions
     And the content of file "/sharingfolder/sharefile.txt" for user "Brian" should be "First content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharee can restore a file inside a shared folder created by sharee and modified by sharer
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/sharingfolder"
@@ -233,7 +260,7 @@ Feature: dav-versions
     And the content of file "/sharingfolder/sharefile.txt" for user "Brian" should be "First content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharer can restore a file inside a shared folder created by sharee and modified by sharee
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/sharingfolder"
@@ -246,7 +273,7 @@ Feature: dav-versions
     And the content of file "/sharingfolder/sharefile.txt" for user "Brian" should be "old content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharee can restore a file inside a shared folder created by sharer and modified by sharer
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/sharingfolder"
@@ -259,7 +286,7 @@ Feature: dav-versions
     And the content of file "/sharingfolder/sharefile.txt" for user "Brian" should be "old content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharee can restore a file inside a shared folder created by sharer and modified by sharer, when the folder has been moved by the sharee
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/sharingfolder"
@@ -274,7 +301,7 @@ Feature: dav-versions
     And the content of file "/received/sharingfolder/sharefile.txt" for user "Brian" should be "old content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharee can restore a shared file created and modified by sharer, when the file has been moved by the sharee (file is at the top level of the sharer)
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "old content" to "/sharefile.txt"
@@ -288,7 +315,7 @@ Feature: dav-versions
     And the content of file "/received/sharefile.txt" for user "Brian" should be "old content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario: sharee can restore a shared file created and modified by sharer, when the file has been moved by the sharee (file is inside a folder of the sharer)
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/sharingfolder"
@@ -303,7 +330,7 @@ Feature: dav-versions
     And the content of file "/received/sharefile.txt" for user "Brian" should be "old content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-34
   Scenario: sharer can restore a file inside a group shared folder modified by sharee
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Carol" has been created with default attributes and without skeleton files
@@ -322,7 +349,7 @@ Feature: dav-versions
     And the content of file "/sharingfolder/sharefile.txt" for user "Carol" should be "First content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-243
   Scenario Outline: Moving a file (with versions) into a shared folder as the sharee and as the sharer
     Given using <dav_version> DAV path
     And user "Brian" has been created with default attributes and without skeleton files
@@ -388,7 +415,7 @@ Feature: dav-versions
     Then the value of the item "//s:exception" in the response about user "Alice" should be "Sabre\DAV\Exception\NotFound"
 
   @skipOnStorage:ceph @files_primary_s3-issue-161 @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-376
   Scenario: Receiver tries get file versions of shared file from the sharer
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "textfile0" to "textfile0.txt"
@@ -399,3 +426,18 @@ Feature: dav-versions
     When user "Brian" tries to get versions of file "textfile0.txt" from "Alice"
     Then the HTTP status code should be "207"
     And the number of versions should be "3"
+
+  @skipOnStorage:ceph @files_primary_s3-issue-161 @files_sharing-app-required
+  @skipOnOcV10 @issue-ocis-reva-376
+  #after fixing all issues delete this Scenario and use the one above
+  Scenario: Receiver tries get file versions of shared file from the sharer
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file with content "textfile0" to "textfile0.txt"
+    And user "Alice" has uploaded file with content "version 1" to "textfile0.txt"
+    And user "Alice" has uploaded file with content "version 2" to "textfile0.txt"
+    And user "Alice" has uploaded file with content "version 3" to "textfile0.txt"
+    And user "Alice" has shared file "textfile0.txt" with user "Brian"
+    When user "Brian" tries to get versions of file "textfile0.txt" from "Alice"
+    Then the HTTP status code should be "207"
+    And the number of versions should be "4"
+#    And the number of versions should be "3"

@@ -212,11 +212,15 @@ class AuthContext implements Context {
 			$this->featureContext->pushToLastHttpStatusCodesArray(
 				$this->featureContext->getResponse()->getStatusCode()
 			);
-			$this->featureContext->pushToLastOcsCodesArray(
-				$this->featureContext->ocsContext->getOCSResponseStatusCode(
-					$this->featureContext->getResponse()
-				)
-			);
+			try {
+				$this->featureContext->pushToLastOcsCodesArray(
+					$this->featureContext->ocsContext->getOCSResponseStatusCode(
+						$this->featureContext->getResponse()
+					)
+				);
+			} catch (\Exception $e) {
+				// if response couldn't be converted into xml then skip push to last ocs status codes array
+			}
 		}
 	}
 
@@ -345,6 +349,7 @@ class AuthContext implements Context {
 			$this->featureContext->pushToLastHttpStatusCodesArray(
 				$this->featureContext->getResponse()->getStatusCode()
 			);
+			var_dump($this->featureContext->getResponse());
 			$this->featureContext->pushToLastOcsCodesArray(
 				$this->featureContext->ocsContext->getOCSResponseStatusCode(
 					$this->featureContext->getResponse()

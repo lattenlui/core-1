@@ -404,15 +404,27 @@ Feature: dav-versions
       | new         | Brian |
 
   @skipOnOcV10.3.0 @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcis @issue-ocis-reva-382
   Scenario: Receiver tries to get file versions of unshared file from the sharer
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "textfile0" to "textfile0.txt"
     And user "Alice" has uploaded file with content "textfile1" to "textfile1.txt"
     And user "Alice" has shared file "textfile0.txt" with user "Brian"
     When user "Brian" tries to get versions of file "textfile1.txt" from "Alice"
-    Then the HTTP status code should be "404"
+    Then the HTTP status code should be "207"
     Then the value of the item "//s:exception" in the response about user "Alice" should be "Sabre\DAV\Exception\NotFound"
+
+  @skipOnOcV10.3.0 @files_sharing-app-required
+  @skipOnOcV10 @issue-ocis-reva-382
+  Scenario: Receiver tries to get file versions of unshared file from the sharer
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file with content "textfile0" to "textfile0.txt"
+    And user "Alice" has uploaded file with content "textfile1" to "textfile1.txt"
+    And user "Alice" has shared file "textfile0.txt" with user "Brian"
+    When user "Brian" tries to get versions of file "textfile1.txt" from "Alice"
+    Then the HTTP status code should be "207"
+#    Then the HTTP status code should be "404"
+#    Then the value of the item "//s:exception" in the response about user "Alice" should be "Sabre\DAV\Exception\NotFound"
 
   @skipOnStorage:ceph @files_primary_s3-issue-161 @files_sharing-app-required
   @skipOnOcis @issue-ocis-reva-376

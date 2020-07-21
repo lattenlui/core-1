@@ -69,6 +69,7 @@ Feature: auth
       | /ocs/v1.php/privatedata/getattribute                        |
       | /ocs/v2.php/privatedata/getattribute                        |
     Then the HTTP status code of responses on all endpoints should be "401"
+    Then the OCS status code of responses on all endpoints should be "notset"
 
   @issue-32068 @skipOnOcis
   @issue-ocis-reva-11
@@ -229,6 +230,7 @@ Feature: auth
       | /ocs/v1.php/privatedata/getattribute                        |
       | /ocs/v2.php/privatedata/getattribute                        |
     Then the HTTP status code of responses on all endpoints should be "401"
+    Then the OCS status code of responses on all endpoints should be "notset"
 
   @skipOnOcis
   @issue-ocis-reva-65

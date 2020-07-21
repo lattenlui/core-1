@@ -219,7 +219,8 @@ class AuthContext implements Context {
 					)
 				);
 			} catch (\Exception $e) {
-				// if response couldn't be converted into xml then skip push to last ocs status codes array
+				// if response couldn't be converted into xml then push "notset" to last ocs status codes array
+				$this->featureContext->pushToLastOcsCodesArray("notset");
 			}
 		}
 	}
@@ -356,7 +357,8 @@ class AuthContext implements Context {
 					)
 				);
 			} catch (\Exception $e) {
-				// if response couldn't be converted into xml then skip push to last ocs status codes array
+				// if response couldn't be converted into xml then push "notset" to last ocs status codes array
+				$this->featureContext->pushToLastOcsCodesArray("notset");
 			}
 		}
 	}

@@ -75,3 +75,4 @@ Feature: auth
       | /ocs/v1.php/privatedata/setattribute/testing/test               |
       | /ocs/v2.php/privatedata/setattribute/testing/test               |
     Then the HTTP status code of responses on all endpoints should be "401"
+    Then the OCS status code of responses on all endpoints should be "notset"

@@ -21,6 +21,7 @@ Feature: delete file/folder
       | /remote.php/dav/files/%username%/PARENT            |
       | /remote.php/dav/files/%username%/PARENT/parent.txt |
     Then the HTTP status code of responses on all endpoints should be "401"
+    Then the OCS status code of responses on all endpoints should be "notset"
 
   Scenario: send DELETE requests to webDav endpoints as normal user with no password
     When user "Alice" requests these endpoints with "DELETE" including body "doesnotmatter" using password "" about user "Alice"

@@ -510,8 +510,9 @@ class OCSContext implements Context {
 						$this->featureContext->getResponse()
 					)
 				);
-			} catch (Exception $exception) {
-				// do nothing if ocs code is not found
+			} catch (\Exception $e) {
+				// if response couldn't be converted into xml then push "notset" to last ocs status codes array
+				$this->featureContext->pushToLastOcsCodesArray("notset");
 			}
 		}
 	}

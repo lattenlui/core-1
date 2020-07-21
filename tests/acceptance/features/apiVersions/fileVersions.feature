@@ -349,7 +349,7 @@ Feature: dav-versions
     And the content of file "/sharingfolder/sharefile.txt" for user "Carol" should be "First content"
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-243
+  @skipOnOcis @issue-ocis-reva-243 @issue-ocis-reva-386
   Scenario Outline: Moving a file (with versions) into a shared folder as the sharee and as the sharer
     Given using <dav_version> DAV path
     And user "Brian" has been created with default attributes and without skeleton files
@@ -377,7 +377,37 @@ Feature: dav-versions
       | new         | Brian |
 
   @files_sharing-app-required
-  @skipOnOcis @issue-ocis-reva-21
+  @skipOnOcV10 @issue-ocis-reva-243 @issue-ocis-reva-386
+  #after fixing all issues delete this Scenario and use the one above
+  Scenario Outline: Moving a file (with versions) into a shared folder as the sharee and as the sharer
+    Given using <dav_version> DAV path
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has created folder "/testshare"
+    And user "Brian" has created a share with settings
+      | path        | testshare |
+      | shareType   | user      |
+      | permissions | change    |
+      | shareWith   | Alice     |
+    And user "Brian" has uploaded file with content "test data 1" to "/testfile.txt"
+    And user "Brian" has uploaded file with content "test data 2" to "/testfile.txt"
+    And user "Brian" has uploaded file with content "test data 3" to "/testfile.txt"
+    And user "Brian" moves file "/testfile.txt" to "/testshare/testfile.txt" using the WebDAV API
+    Then the HTTP status code should be "201"
+    And the content of file "/testshare/testfile.txt" for user "Alice" should be ""
+#    And the content of file "/testshare/testfile.txt" for user "Alice" should be "test data 3"
+    And the content of file "/testshare/testfile.txt" for user "Brian" should be "test data 3"
+    And as "Brian" file "/testfile.txt" should not exist
+    And as "Alice" file "/testshare/testfile.txt" should not exist
+    And the content of file "/testshare/testfile.txt" for user "Brian" should be "test data 3"
+#    And the version folder of file "/testshare/testfile.txt" for user "Alice" should contain "2" elements
+#    And the version folder of file "/testshare/testfile.txt" for user "Brian" should contain "2" elements
+    Examples:
+      | dav_version |
+      | old         |
+      | new         |
+
+  @files_sharing-app-required
+  @skipOnOcis @issue-ocis-reva-243 @issue-ocis-reva-386
   Scenario Outline: Moving a file (with versions) out of a shared folder as the sharee and as the sharer
     Given using <dav_version> DAV path
     And user "Brian" has been created with default attributes and without skeleton files
@@ -403,6 +433,32 @@ Feature: dav-versions
       | old         | Brian |
       | new         | Brian |
 
+  @files_sharing-app-required
+  @skipOnOcV10 @issue-ocis-reva-243 @issue-ocis-reva-386
+  #after fixing all issues delete this Scenario and use the one above
+  Scenario Outline: Moving a file (with versions) out of a shared folder as the sharee and as the sharer
+    Given using <dav_version> DAV path
+    And user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has created folder "/testshare"
+    And user "Brian" has uploaded file with content "test data 1" to "/testshare/testfile.txt"
+    And user "Brian" has uploaded file with content "test data 2" to "/testshare/testfile.txt"
+    And user "Brian" has uploaded file with content "test data 3" to "/testshare/testfile.txt"
+    And user "Brian" has created a share with settings
+      | path        | testshare |
+      | shareType   | user      |
+      | permissions | change    |
+      | shareWith   | Alice     |
+    When user "Brian" moves file "/testshare/testfile.txt" to "/testfile.txt" using the WebDAV API
+    Then the HTTP status code should be "201"
+    And the content of file "/testfile.txt" for user "Brian" should be "test data 3"
+    And as "Alice" file "/testshare/testfile.txt" should not exist
+    And as "Brian" file "/testshare/testfile.txt" should not exist
+#    And the version folder of file "/testfile.txt" for user "Brian" should contain "2" elements
+    Examples:
+      | dav_version |
+      | old         |
+      | new         |
+
   @skipOnOcV10.3.0 @files_sharing-app-required
   @skipOnOcis @issue-ocis-reva-382
   Scenario: Receiver tries to get file versions of unshared file from the sharer
@@ -411,11 +467,12 @@ Feature: dav-versions
     And user "Alice" has uploaded file with content "textfile1" to "textfile1.txt"
     And user "Alice" has shared file "textfile0.txt" with user "Brian"
     When user "Brian" tries to get versions of file "textfile1.txt" from "Alice"
-    Then the HTTP status code should be "207"
+    Then the HTTP status code should be "404"
     Then the value of the item "//s:exception" in the response about user "Alice" should be "Sabre\DAV\Exception\NotFound"
 
   @skipOnOcV10.3.0 @files_sharing-app-required
   @skipOnOcV10 @issue-ocis-reva-382
+  #after fixing all issues delete this Scenario and use the one above
   Scenario: Receiver tries to get file versions of unshared file from the sharer
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "textfile0" to "textfile0.txt"

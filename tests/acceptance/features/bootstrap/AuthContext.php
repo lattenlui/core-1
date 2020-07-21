@@ -349,7 +349,6 @@ class AuthContext implements Context {
 			$this->featureContext->pushToLastHttpStatusCodesArray(
 				$this->featureContext->getResponse()->getStatusCode()
 			);
-			var_dump($this->featureContext->getResponse());
 			$this->featureContext->pushToLastOcsCodesArray(
 				$this->featureContext->ocsContext->getOCSResponseStatusCode(
 					$this->featureContext->getResponse()
